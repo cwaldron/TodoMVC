@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-framework="javascript">
+	<head>
+		<meta charset="utf-8">
+		<title>TodoMVC</title>
+		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="css/index.css">
+	</head>
+	<body>
+		<section class="todoapp">
+			<header class="header">
+				<h1>todos</h1>
+				<input class="new-todo" placeholder="What needs to be done?" autofocus>
+			</header>
+			<section class="main">
+				<input class="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class="todo-list"></ul>
+			</section>
+			<footer class="footer">
+				<span class="todo-count"></span>
+				<ul class="filters">
+					<li>
+						<a href="#/" class="selected">All</a>
+					</li>
+					<li>
+						<a href="#/active">Active</a>
+					</li>
+					<li>
+						<a href="#/completed">Completed</a>
+					</li>
+				</ul>
+				<button class="clear-completed">Clear completed</button>
+			</footer>
+		</section>
+		<footer class="info">
+			<p>Double-click to edit a todo</p>
+			<p>Created by <a href="http://twitter.com/oscargodson">Oscar Godson</a></p>
+			<p>Refactored by <a href="https://github.com/cburgmer">Christoph Burgmer</a></p>
+			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+		</footer>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.js"></script>
+        <script src="js/inherit.js"></script>
+        <script src="js/map.js"></script>
+        <script src="js/delegate.js"></script>
+        <script src="js/eventbus.js"></script>
+        <script src="js/publisher.js"></script>
+        <script src="js/subscriber.js"></script>
+		<script src="js/helper.js"></script>
+		<script src="js/template.js"></script>
+		<script src="js/messages.js"></script>
+		<script src="js/storage.js"></script>
+		<script src="js/view.js"></script>
+		<script src="js/todoitem.js"></script>
+		<script src="js/todostore.js"></script>
+		<script src="js/todotemplate.js"></script>
+		<script src="js/todoview.js"></script>
+		<script src="js/todos.js"></script>
+		<script src="js/main.js"></script>
+	</body>
+</html>
