@@ -23,7 +23,7 @@ function TodoView() {
                 for (var ii = 0; ii < todos.length; ++ii) {
                     var viewdata = Object.create(null);
                     viewdata.id = todos[ii].id;
-                    viewdata.title = _.escape(todos[ii].title);
+                    viewdata.title = todos[ii].title;
                     if (todos[ii].completed) {
                         viewdata.completed = 'completed';
                         viewdata.checked = 'checked';
