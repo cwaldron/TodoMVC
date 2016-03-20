@@ -1,16 +1,27 @@
-/*
-*  Copyright (C) 2015 by Flowingly Ltd. All Rights Reserved.
-*/
-
-// This file holds all of the JavaScript code specific to the BPMN.html page.
-
-// Setup all of the Diagrams and what they need.
-// This is called after the page is loaded.
-
-/* jshint strict: true, undef: true */
+/*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
 var Delegate = (function () {
     "use strict";
 
+	/**
+	 * Creates a delegate.
+     *
+     * A delegate is a callback function when invoked its this variable is set to the
+     * predefined scope object.
+     *
+     * NOTE: This class was written years before bind was natively supported by Javascript
+     * functions.  However this class remains useful as bind doesn't support the ability
+     * to inspect the scope object bound to the callback.
+	 *
+	 * @param {object}     scope       object used to set the callback's scope.
+	 * @param {function}   callback    the callback function.
+	 *
+	 * @returns {function} Delegate invocation function.
+	 *
+	 * @example
+	 * Delegate.create(this, function([arg1[, arg2[, ...]]]) {
+	 *     ...
+     * });
+	 */
     var create = function(scope, callback) {
 
         function Delegate(obj, func) {

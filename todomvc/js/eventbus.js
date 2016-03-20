@@ -1,13 +1,17 @@
-/*
-*  Copyright (C) 2015 by Chris Solutions Ltd. All Rights Reserved.
-*/
-
-// EventBus definition.
-// Sets up a publisher/subscriber event bus.
-
-/* jshint strict: true, undef: true */
+/*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
 /* globals Publisher */
 
+/**
+ * An event bus is an object that dispatches notification of events to 
+ * subscribers that are bound to a specific message.  A message is an 
+ * event type.  When an event of a particualar type occurs the event message
+ * is published to subscribers of that event type.
+ *
+ * @class
+ *
+ * @example
+ * var eventBus = new EventBus([messages]);
+ */
 var EventBus = function (messages) {
     "use strict";
 

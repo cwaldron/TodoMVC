@@ -1,9 +1,3 @@
-/*
-*  Copyright (C) 2016 by Chris Solutions Ltd. All Rights Reserved.
-*/
-
-// TodoItem data structure.
-
 /*jshint strict: true, undef: true, eqeqeq: true */
 /* globals console  */
 
@@ -22,7 +16,7 @@ function TodoItem(id_, title_, completed_) {
 	 * @example
 	 * storage.has("mystore");
 	 */
-    function update(id, title, completed) {
+    function init(id, title, completed) {
         var args = 0;
         
         // Get the true argument count.
@@ -61,7 +55,7 @@ function TodoItem(id_, title_, completed_) {
     }
 
     // set the values.
-    update(id_, title_, completed_);
+    init(id_, title_, completed_);
     
     // return the contract.
     return { 

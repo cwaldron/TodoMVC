@@ -1,7 +1,11 @@
 /* jshint strict: true, undef: true, eqeqeq: true, laxbreak: true */
-/* globals console, Todos */
+/* globals console, EventBus */
 
-/*global EventBus */
+/**
+ * The base view class.
+ *
+ * @class
+ */
 
 function View() {
 	'use strict';

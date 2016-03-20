@@ -1,4 +1,16 @@
+/*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
+
+/**
+ * Javascript class inheritance.
+ *
+ * This uses a technique of copying the prototype and properties of the base class
+ * to the derive class.
+ *
+ * @example
+ * Object.inherit([derive], base);
+ */
 (function () {
+    "use strict";
 	
 	var getClassName = function(clazz) {
         var name;
@@ -34,16 +46,25 @@
         }
     };
 
+    /**
+     * inherit function attached to all objects
+     *
+     * @param {class} clazz     The derive class.
+     * @param {class} base      The base class.
+     *
+     * @example
+     * Object.inherit([derive], base);
+     */
     if (!Object.hasOwnProperty('inherit')) {
         Object.defineProperty(Object.prototype, 'inherit', {
             value: function(clazz, base) {
 				
-                // Drive class from the base class.
+                // Derive new class from the base class.
                 derive(clazz, base);
 
                 // Set up the instance.
                 for (var property in clazz.prototype) {	
-                    if (property != '$init') {
+                    if (property !== '$init') {
                         Object.defineProperty(this, property, Object.getOwnPropertyDescriptor(clazz.prototype, property));
                     } else {
                         delete clazz.prototype[property];
