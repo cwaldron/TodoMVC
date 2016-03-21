@@ -1,5 +1,11 @@
 /*jshint strict: true, undef: true, laxbreak:true */
 /* globals $, console, document, Subscriber, Handlebars */
+
+/**
+ * The base template class.
+ *
+ * @class
+ */
 function Template() {
     "use strict";
     
@@ -13,7 +19,7 @@ function Template() {
 	 *
 	 * @param {string} name    template name.
 	 */
-    function getTemplate (name) {
+    function getTemplate(name) {
         if (templates[name] === undefined) {
 
             // load undefined template.
@@ -36,12 +42,11 @@ function Template() {
 	/**
 	 * Initialize the template
 	 *
-	 * @param {object} model The model instance
-	 * @param {object} view The view instance
+	 * @param {object} source  Template source object.
 	 */
-    this.init = function(sources) {
-        Object.getOwnPropertyNames(sources).forEach(new Subscriber(this, function(name) {
-            templates[name] = Handlebars.compile(sources[name]);
+    this.init = function(source) {
+        Object.getOwnPropertyNames(source).forEach(new Subscriber(this, function(name) {
+            templates[name] = Handlebars.compile(source[name]);
             Object.defineProperty(this, name, {
                 get: function() { return name; },
                 enumerable: true,

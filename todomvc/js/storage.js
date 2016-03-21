@@ -67,7 +67,7 @@ var Storage = function () {
             return;
         }
         
-        store.forEach(function(key, value) {
+        store.forEach(function(value) {
             if (refine(query, value)) {
                 results.push(value);
             }

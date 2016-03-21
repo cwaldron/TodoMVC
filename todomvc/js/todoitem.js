@@ -1,6 +1,11 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
 /* globals console  */
 
+/**
+ * The todo item model.
+ *
+ * @class
+ */
 function TodoItem(id_, title_, completed_) {
     "use strict";
     
@@ -9,12 +14,12 @@ function TodoItem(id_, title_, completed_) {
         _completed = !!completed_;
     
     /**
-	 * Determines whether the storage name exists.
+	 * Initializes the todo item.
 	 *
-	 * @param {string} name    The name of the storage.
+	 * @param {number}     id          Todo identifier.
+	 * @param {string}     title       Todo title.
+	 * @param {boolean}    completed   Indicates the todo is completed.
 	 *
-	 * @example
-	 * storage.has("mystore");
 	 */
     function init(id, title, completed) {
         var args = 0;

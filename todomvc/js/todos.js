@@ -1,6 +1,11 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
 /* globals console, Messages, Subscriber, TodoStore, TodoView */
 
+/**
+ * The todos controller.
+ *
+ * @class
+ */
 function Todos() {
     "use strict";
     
@@ -162,7 +167,8 @@ function Todos() {
                 view.render(view.commands.removeItem, id);
             });
 
-            if (!silent) display();
+            if (!silent)
+                showStats();
         }),
         
         /**
@@ -175,7 +181,7 @@ function Todos() {
                 });
             });
 
-            display();
+            showStats();
         }),
         
         /**
@@ -190,7 +196,8 @@ function Todos() {
                 view.render(view.commands.completedItem, item.id, item.completed);
             });
             
-            if (!silent) showStats();
+            if (!silent)
+                showStats();
         }),
         
         /**

@@ -2,12 +2,11 @@
 /*global console */
 
 /**
- * Creates a storage object that wraps local storage.
+ * The map class is a collection that combines sequential access to 
+ * an association.
  *
- * @param {string} name The name of our DB we want to use
- * real life you probably would be making AJAX calls
+ * @class
  */
-
 var Map = function (json) {
 	'use strict';
     
@@ -35,14 +34,23 @@ var Map = function (json) {
         enumerable: true
     });
     
-
-    /**
-	 * Determines whether the storage name exists.
+	/**
+	 * Gets the key-value pair at a particular index.
 	 *
-	 * @param {string} name    The name of the storage.
+	 * @param {number} index	The sequence index.
 	 *
 	 * @example
-	 * storage.has("mystore");
+	 * map.at(0);
+	 */
+    this.at = function (index) {
+        return 	{ key: entries[index].key, value: entries[index].value };
+    };
+	
+    /**
+	 * Clears the entries from the map.
+	 *
+	 * @example
+	 * map.clear();
 	 */
     this.clear = function () {
         entries = [];
@@ -53,14 +61,13 @@ var Map = function (json) {
         }
     };
     
-
     /**
-	 * Determines whether the storage name exists.
+	 * Deletes entry from the map.
 	 *
-	 * @param {string} name    The name of the storage.
+	 * @param {string} key     The key of the entry to remove from map.
 	 *
 	 * @example
-	 * storage.delete("mystore");
+	 * map.delete("mystore");
 	 */
     this.delete = function (key) {
         if (this.has(key)) {
@@ -93,55 +100,56 @@ var Map = function (json) {
     });
     
     /**
-	 * Determines whether the storage name exists.
+	 * Executes a callback for each key/value pair in the map.
 	 *
-	 * @param {string} name    The name of the storage.
+	 * @param {function}   callback        Callback to execute for each element.
+	 * @param {object}     thisArg         The scope of the callback.
 	 *
 	 * @example
-	 * storage.has("mystore");
+     * map.forEach(function(value, key, index) {
+     *    ...
+     * });
 	 */
     this.forEach = function (callback, thisArg) {
-        var thisParam = thisArg || this;
+        var scope = thisArg || this;
         
         for (var ii = 0; ii < entries.length; ++ii) {
-            if (callback.call(thisParam, entries[ii].key, entries[ii].value) === true)
+            if (callback.call(scope, entries[ii].value, entries[ii].key, ii) === true)
                 break;
         }
     };
     
-    
 	/**
-	 * Determines whether the storage name exists.
+	 * Gets the value associated with the specified key.
 	 *
-	 * @param {string} name    The name of the storage.
+	 * @param {string} key     The key of the associated mapped value.
 	 *
 	 * @example
-	 * storage.has("mystore");
+	 * var value = map.key("mykey");
 	 */
     this.get = function (key) {
         return this.has(key) ? mapper[key].entry.value : undefined;
     };
     
-    
 	/**
-	 * Determines whether the storage name exists.
+	 * Determines whether the specified key exists in the map.
 	 *
-	 * @param {string} name    The name of the storage.
+	 * @param {string} key     The key of the associated mapped value.
+	 *
+     * @returns {boolean}      Returns true if the key exists in the map; otherwise false.
 	 *
 	 * @example
-	 * storage.has("mystore");
+	 * map.has("mykey");
 	 */
     this.has = function (key) {
         return mapper.hasOwnProperty(key);
     };
     
 	/**
-	 * Determines whether the storage name exists.
-	 *
-	 * @param {string} name    The name of the storage.
+	 * Retuns a collection of the map keys.
 	 *
 	 * @example
-	 * storage.has("mystore");
+	 * map.keys();
 	 */
     this.keys = function () {
         var results = [];
@@ -151,14 +159,14 @@ var Map = function (json) {
         return results;
     };
     
-
 	/**
-	 * Determines whether the storage name exists.
+	 * Assign a value referenced by a key.
 	 *
-	 * @param {string} name    The name of the storage.
+	 * @param {string} key     The key of the associated mapped value.
+	 * @param {object} value   The value to associate with the key.
 	 *
 	 * @example
-	 * storage.has("mystore");
+	 * map.set(key, value);
 	 */
     this.set = function (key, value) {
         var info = this.has(key)
@@ -178,14 +186,11 @@ var Map = function (json) {
         mapper[key] = info;
     };
     
-    
 	/**
-	 * Determines whether the storage name exists.
-	 *
-	 * @param {string} name    The name of the storage.
+	 * Retuns a collection of the mapped values.
 	 *
 	 * @example
-	 * storage.has("mystore");
+	 * map.values();
 	 */
     this.values = function () {
         var results = [];
@@ -195,14 +200,11 @@ var Map = function (json) {
         return results;
     };
     
-    
 	/**
 	 * Converts map to JSON string.
 	 *
-	 * @param {string} name    The name of the storage.
-	 *
 	 * @example
-	 * storage.has("mystore");
+	 * map.toString();
 	 */
     this.toString = function () {
         return JSON.stringify(entries);

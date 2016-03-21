@@ -246,7 +246,7 @@ label[for='toggle-all'] {
 	margin-bottom: -1px;
 }
 
-.footer {
+.menu {
 	color: #777;
 	padding: 10px 15px;
 	height: 20px;
@@ -254,7 +254,7 @@ label[for='toggle-all'] {
 	border-top: 1px solid #e6e6e6;
 }
 
-.footer:before {
+.menu:before {
 	content: '';
 	position: absolute;
 	right: 0;
@@ -276,6 +276,10 @@ label[for='toggle-all'] {
 
 .todo-count strong {
 	font-weight: 300;
+}
+
+.content {
+    display: none;
 }
 
 .filters {

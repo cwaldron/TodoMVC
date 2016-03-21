@@ -6,7 +6,6 @@
  *
  * @class
  */
-
 function View() {
 	'use strict';
     

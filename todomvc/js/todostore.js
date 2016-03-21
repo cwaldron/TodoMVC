@@ -1,6 +1,11 @@
 /*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
 /* globals $, console, document, Subscriber, Storage, TodoItem */
 
+/**
+ * The todos model.
+ *
+ * @class
+ */
 function TodoStore() {
     "use strict";
     

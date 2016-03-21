@@ -1,6 +1,11 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
 /*global $, _, document, View, TodoTemplate */
 
+/**
+ * The todo view.
+ *
+ * @class
+ */
 function TodoView() {
 	'use strict';
     
@@ -10,8 +15,9 @@ function TodoView() {
         todoList = $('.todo-list'),
 		todoItemCounter = $('.todo-count'),
 		clearCompleted = $('.clear-completed'),
+        content = $('.content'),
 		main = $('.main'),
-		footer = $('.footer'),
+		menu = $('.menu'),
 		toggleAll = $('.toggle-all'),
 		newTodo = $('.new-todo'),
         template = new TodoTemplate(),
@@ -40,9 +46,8 @@ function TodoView() {
                 viewdata.plural = (stats.active > 1) ? 's' : '';
                 var text = template.createTextFor(template.counter, viewdata);
                 todoItemCounter.html(text);
+                content.css('display', (stats.total > 0) ? 'block' : 'none');
                 clearCompleted.css('display', (stats.completed > 0) ? 'block' : 'none');
-                main.css('display', (stats.total > 0) ? 'block' : 'none');
-                footer.css('display', (stats.total > 0) ? 'block' : 'none');
             },
             
             toggleAll: function (isCompleted) {
@@ -50,8 +55,8 @@ function TodoView() {
             },
             
             setFilter: function (href) {
-                footer.find('.filters .selected').removeClass('selected');
-                footer.find('.filters [href="' + href + '"]').addClass('selected');
+                menu.find('.filters .selected').removeClass('selected');
+                menu.find('.filters [href="' + href + '"]').addClass('selected');
             },
             
             /**
