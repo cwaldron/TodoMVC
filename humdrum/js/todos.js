@@ -34,7 +34,7 @@ function Todos() {
 	function showStats() {
         store.getStats(function(stats) {
             view.render(view.commands.showStats, stats);
-            view.render(view.commands.toggleAll, (stats.completed == stats.total));
+            view.render(view.commands.toggleAll, (stats.completed === stats.total));
         });
 	}
     
