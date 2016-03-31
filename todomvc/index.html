@@ -41,8 +41,41 @@
 			<p>Refactored by <a href="https://github.com/cburgmer">Christoph Burgmer</a></p>
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
+        
+        <section id="templates">
+            <!-- Router template -->
+            <template id="template-router">
+                <li>
+                    <a href="#/" class="selected">{{default}}</a>
+                </li>
+                <li>
+                    <a href="#/active">{{active}}</a>
+                </li>
+                <li>
+                    <a href="#/completed">{{completed}}</a>
+                </li>
+            </template>
+
+            <!-- Todo list item template -->
+            <template id="template-listitem">
+                <li data-id="{{id}}" class="{{completed}}">
+                    <div class="view">
+                        <input class="toggle" type="checkbox" {{checked}}>
+                        <label>{{title}}</label>
+                        <button class="destroy"></button>
+                    </div>
+                </li>
+            </template>
+
+            <!-- Todos summary template -->
+            <template id="template-summary">
+                <strong>{{count}}</strong> item{{plural}} left
+            </template>
+        </section>
+        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+        <script src="js/create.js"></script>
         <script src="js/inherit.js"></script>
         <script src="js/map.js"></script>
         <script src="js/delegate.js"></script>
@@ -51,6 +84,7 @@
         <script src="js/subscriber.js"></script>
 		<script src="js/template.js"></script>
 		<script src="js/storage.js"></script>
+		<script src="js/dispatcher.js"></script>
 		<script src="js/view.js"></script>
 		<script src="js/todoitem.js"></script>
 		<script src="js/todostore.js"></script>

@@ -29,6 +29,14 @@ var EventBus = function (messages) {
         }
     }
     
+	/**
+	 * subsribe(message, subscriber)
+	 *
+	 * attaches a subscriber to a message.
+     *
+     * @param {string}      message     event message.
+     * @param {Subscriber}  subscriber  event subscriber.
+	 */    
     var subscribe = function (message, subscriber) {
         if (!publishers[message]) {
             publishers[message] = new Publisher(message);
@@ -37,6 +45,14 @@ var EventBus = function (messages) {
         publishers[message].subscribe(subscriber);
     };
     
+	/**
+	 * unsubsribe(message, subscriber)
+	 *
+	 * detaches a subscriber from a message.
+     *
+     * @param {string}      message     event message.
+     * @param {Subscriber}  subscriber  event subscriber.
+	 */    
     var unsubscribe = function (message, subscriber) {
         if (!!publishers[message]) {
             if (!subscriber) {
@@ -47,6 +63,13 @@ var EventBus = function (messages) {
         }
     };
     
+	/**
+	 * publish(message)
+	 *
+	 * triggers event to message subscribers.
+     *
+     * @param {string}      message     event message.
+	 */    
     var publish = function (message) {
         if (!!publishers[message]) {
             var args = [];
@@ -57,6 +80,13 @@ var EventBus = function (messages) {
         }
     };
     
+	/**
+	 * getPublishers()
+	 *
+	 * returns the event bus publishers 
+     *
+     * @returns {Array}     Array of publishers.
+	 */    
     var getPublishers = function () {
         var list = [];
         for (var message in publishers) {
@@ -67,6 +97,13 @@ var EventBus = function (messages) {
         return list;
     };
     
+	/**
+	 * getMessages()
+	 *
+	 * returns the event bus message names.
+     *
+     * @returns {Array}     Array of message names.
+	 */    
     var getMessages = function () {
         return Object.getOwnPropertyNames(publishers);
     };

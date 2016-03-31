@@ -9,19 +9,37 @@ var Publisher = function (message) {
             return (scope === undefined) ? callback : Delegate.create(scope, callback);
         };
     
-    // Establish class and set instance.
-    this.inherit(Publisher);
-    
+	/**
+	 * message
+	 *
+	 * getter retrieving the associated message.
+     *
+     * @param {string}  message     Message name.
+	 */    
     Object.defineProperty(this, "message", {
         get: function () { return message; },
         enumerable: true
     }); 
     
+	/**
+	 * subsribe(subscriber)
+	 *
+	 * adds a subscriber.
+     *
+     * @param {function}    subscriber  Event subscriber.
+	 */    
     this.subscribe = function (subscriber) {
         var subscriberDelegate = getDelegate(subscriber);
         subscribers.push(subscriberDelegate);
     };
     
+	/**
+	 * unsubsribe(subscriber)
+	 *
+	 * removes a subscriber
+     *
+     * @param {function}    subscriber  Event subscriber.
+	 */    
     this.unsubscribe = function (subscriber) {
         var subscriberDelegate = getDelegate(subscriber);
         if (subscriberDelegate !== null) {
@@ -38,6 +56,13 @@ var Publisher = function (message) {
         }
     };
         
+	/**
+	 * publish([arg1[, arg2[, ...]]])
+	 *
+	 * triggers event to subscribers.
+     *
+     * @param {Arguments}   arguments   Event arguments.
+	 */    
     this.publish = function() {
         var count = subscribers.length;
         for (var ii = 0; ii < count; ++ii) {
@@ -48,7 +73,11 @@ var Publisher = function (message) {
         }
     };
     
-	
+	/**
+	 * clear()
+	 *
+	 * removes all subscribers.
+	 */    
 	this.clear = function() {
 		subscribers = [];
 	};

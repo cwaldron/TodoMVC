@@ -20,4 +20,6 @@ function TodoTemplate() {
     };
     
     this.init(templates);
+    //this.init($('#templates'));
+    //this.init("template/templates.html");
 }

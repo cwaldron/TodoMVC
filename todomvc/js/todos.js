@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
-/* globals console, Messages, Subscriber, TodoStore, TodoView */
+/* globals console, Subscriber, TodoStore, TodoView */
 
 /**
  * The todos controller.
@@ -19,13 +19,13 @@ function Todos() {
 	 *
 	 * @param {string} '' | 'active' | 'completed'
 	 */
-    function navigate(location) {
+    this.navigate = function(location) {
         currentState = getState(location);
         if (prevState !== currentState) {
             display();
         }
         prevState = currentState;
-	}
+	};
     
 	/**
 	 * Updates the pieces of the page which change depending on the remaining
@@ -34,6 +34,7 @@ function Todos() {
 	function showStats() {
         store.getStats(function(stats) {
             view.render(view.commands.showStats, stats);
+            view.render(view.commands.toggleAll, (stats.completed === stats.total));
         });
 	}
     
@@ -219,13 +220,5 @@ function Todos() {
 	/**
 	 * Set up subscribers.
 	 */
-    view.bind(subscribers);
-    
-
-    /**
-	 * return contract.
-	 */
-    return {
-        navigate: navigate
-    };
+    view.on(subscribers);
 }

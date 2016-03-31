@@ -125,16 +125,16 @@ function TodoView() {
      *************************************************************************/
     
     newTodo.on('change', function() {
-        self.publish(self.messages.todoAdd, this.value);
+        self.trigger(self.messages.todoAdd, this.value);
     });
     
     clearCompleted.on('click', function() {
-        self.publish(self.messages.todoRemoveCompleted, this, clearCompleted.checked);
+        self.trigger(self.messages.todoRemoveCompleted, this, clearCompleted.checked);
     });
     
     
     toggleAll.on('click', function(event) {
-        self.publish(self.messages.todoToggleAll, toggleAll.prop('checked'));
+        self.trigger(self.messages.todoToggleAll, toggleAll.prop('checked'));
     });
     
     /**
@@ -144,7 +144,7 @@ function TodoView() {
      */
     todoList.on('dblclick', 'li label', function(event) {
         var id = $(event.target).parents('li').data('id');
-        self.publish(self.messages.todoEdit, id);
+        self.trigger(self.messages.todoEdit, id);
     });
     
     /**
@@ -156,7 +156,7 @@ function TodoView() {
         var btnCompleted = $(event.target);
         var todoItem = btnCompleted.parents('li');
         var label = todoItem.find('label');
-        self.publish(self.messages.todoToggle, {id: todoItem.data('id'), title: label.text(), completed: btnCompleted.prop('checked')});
+        self.trigger(self.messages.todoToggle, {id: todoItem.data('id'), title: label.text(), completed: btnCompleted.prop('checked')});
     });
     
     /**
@@ -180,7 +180,7 @@ function TodoView() {
             var id = todoItem.data('id');
             todoItem.data('canceled', true);
             editor.blur();
-            self.publish(self.messages.todoEditCancel, id);
+            self.trigger(self.messages.todoEditCancel, id);
         }
     });
     
@@ -192,14 +192,14 @@ function TodoView() {
         var todoItem = editor.parents('li');
         if (!todoItem.data('canceled')) {
             var id = todoItem.data('id');
-            self.publish(self.messages.todoEditSave, id, editor.val());
+            self.trigger(self.messages.todoEditSave, id, editor.val());
         }
     });
 
     // Remove todo item.
     todoList.on('click', '.destroy', function(event) {
         var id = $(event.target).parents('li').data('id');
-        self.publish(self.messages.todoRemove, id);
+        self.trigger(self.messages.todoRemove, id);
     });
     
     // Initialize view commands.

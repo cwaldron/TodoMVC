@@ -1,4 +1,4 @@
-/*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
+/*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true, -W055 */
 
 /**
  * Javascript class inheritance.
@@ -25,6 +25,12 @@
         return name;
     };
 
+    /**
+     * creates a derive class from the base class.
+     *
+     * @param {class} clazz     The derive class.
+     * @param {class} base      The base class.
+     */
     var derive = function(clazz, base) {
         if (clazz.$base)
             return;
@@ -75,5 +81,4 @@
             }
         });
     }
-    
 }());
