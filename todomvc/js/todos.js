@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
-/* globals console, Subscriber, TodoStore, TodoView */
+/* globals console, Subscriber, TodoConfig, TodoStore, TodoView */
 
 /**
  * The todos controller.
@@ -11,6 +11,7 @@ function Todos() {
     
     var currentState,
         prevState,
+        settings = new TodoConfig(),
         view = new TodoView(),
         store = new TodoStore();
     
@@ -221,4 +222,5 @@ function Todos() {
 	 * Set up subscribers.
 	 */
     view.on(subscribers);
+    view.render(view.commands.initContent, settings);
 }

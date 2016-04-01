@@ -146,6 +146,8 @@ function Template() {
 	 *
 	 * @param {string} name    Template name.
 	 * @param {object} data    Template data.
+	 *
+     * @returns {string}       text.
 	 */
     this.createTextFor = function(name, data) {
         if (!name) return;
@@ -158,11 +160,13 @@ function Template() {
 	 *
 	 * @param {string} name    Template name.
 	 * @param {object} data    Template data.
+     *
+     * @returns {$}            jQuery element.
 	 */
     this.createElementFor = function(name, data) {
-        var html = this.createTextFor(name, data);    
+        var html = this.createTextFor(name, data);
         var d = document.createElement("div");
         d.innerHTML = html;
-        return d.children[0];
+        return $(d.children);
     };
 }

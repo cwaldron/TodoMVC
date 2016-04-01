@@ -13,7 +13,7 @@ function Dispatcher() {
 	this.inherit(Dispatcher);
 
 	var eventBus = new EventBus(),
-		cacheCommands = {},
+		commandCache = {},
 		commands = null,
 		messages = null;
 
@@ -26,7 +26,7 @@ function Dispatcher() {
 	  get: function() {
 		  if (!commands) {
 			  commands = Object.create(null);
-			  Object.getOwnPropertyNames(cacheCommands).forEach(function(command) {
+			  Object.getOwnPropertyNames(commandCache).forEach(function(command) {
 				  commands[command] = command;
 			  });
 		  }
@@ -63,7 +63,7 @@ function Dispatcher() {
      * @param {object}  commands    Command object.
      */
 	this.init = function(commands) {
-		cacheCommands = commands;
+		commandCache = commands;
 	};
 
 	/**
@@ -130,6 +130,6 @@ function Dispatcher() {
 	 */    
 	this.execute = function (command) {
 		[].shift.apply(arguments);
-		cacheCommands[command].apply(this, arguments);
+		commandCache[command].apply(this, arguments);
 	};
 }

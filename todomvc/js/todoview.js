@@ -12,58 +12,66 @@ function TodoView() {
     this.inherit(TodoView, View);
     
     var self = this,
-        todoList = $('.todo-list'),
-		todoItemCounter = $('.todo-count'),
-		clearCompleted = $('.clear-completed'),
-        content = $('.content'),
-		main = $('.main'),
-		menu = $('.menu'),
-		toggleAll = $('.toggle-all'),
-		newTodo = $('.new-todo'),
+        view = {},
+        todoapp = $('.todoapp'),
         template = new TodoTemplate(),
         
         viewCommands = {
             
+            initContent: function(settings) {
+                var element = template.createElementFor(template.content, settings.glossary);
+                todoapp.append(element);
+                view.todoList = $('.todo-list');
+                view.todoItemCount = $('.todo-count');
+                view.clearCompleted = $('.clear-completed');
+                view.workspace = $('.workspace');
+                view.main = $('.main');
+                view.menu = $('.menu');
+                view.toggleAll = $('.toggle-all');
+                view.newTodo = $('.new-todo');
+                attachHandlers();
+            },
+            
             showEntries: function (todos) {
-                todoList.empty();
-                for (var ii = 0; ii < todos.length; ++ii) {
+                view.todoList.empty();
+                todos.forEach(function(todo) {
                     var viewdata = Object.create(null);
-                    viewdata.id = todos[ii].id;
-                    viewdata.title = todos[ii].title;
-                    if (todos[ii].completed) {
+                    viewdata.id = todo.id;
+                    viewdata.title = todo.title;
+                    if (todo.completed) {
                         viewdata.completed = 'completed';
                         viewdata.checked = 'checked';
                     }
 
                     var element = template.createElementFor(template.listitem, viewdata);
-                    todoList.append(element);
-                }
+                    view.todoList.append(element);
+                });
             },
             
             showStats: function (stats) {
                 var viewdata = Object.create(null);
                 viewdata.count = stats.active;
                 viewdata.plural = (stats.active > 1) ? 's' : '';
-                var text = template.createTextFor(template.counter, viewdata);
-                todoItemCounter.html(text);
-                content.css('display', (stats.total > 0) ? 'block' : 'none');
-                clearCompleted.css('display', (stats.completed > 0) ? 'block' : 'none');
+                var text = template.createTextFor(template.summary, viewdata);
+                view.todoItemCount.html(text);
+                view.workspace.css('display', (stats.total > 0) ? 'block' : 'none');
+                view.clearCompleted.css('display', (stats.completed > 0) ? 'block' : 'none');
             },
             
             toggleAll: function (isCompleted) {
-                toggleAll.prop('checked', isCompleted);
+                view.toggleAll.prop('checked', isCompleted);
             },
             
             setFilter: function (href) {
-                menu.find('.filters .selected').removeClass('selected');
-                menu.find('.filters [href="' + href + '"]').addClass('selected');
+                view.menu.find('.filters .selected').removeClass('selected');
+                view.menu.find('.filters [href="' + href + '"]').addClass('selected');
             },
             
             /**
              * Clears the new todo field.
              */
             clearNewTodo: function () {
-                newTodo.val('');
+                view.newTodo.val('');
             },
             
             /**
@@ -73,7 +81,7 @@ function TodoView() {
              * @param {string} title    The title of the todo.
              */
             completedItem: function (id, completed) {
-                var listItem = todoList.find('[data-id="' + id + '"]');
+                var listItem = view.todoList.find('[data-id="' + id + '"]');
                 var btnCompleted = listItem.find('.toggle');
                 listItem[(completed) ? 'addClass' : 'removeClass']('completed');
                 btnCompleted.prop('checked', completed);
@@ -86,7 +94,7 @@ function TodoView() {
              * @param {string} title    The title of the todo.
              */
             editItem: function (id, title) {
-                var listItem = todoList.find('[data-id="' + id + '"]'),
+                var listItem = view.todoList.find('[data-id="' + id + '"]'),
                     input = $(document.createElement('input'));
                 listItem.addClass('editing');
                 input.addClass('edit');
@@ -102,7 +110,7 @@ function TodoView() {
              * @param {string} title    The title of the todo.
              */
             editItemDone: function (id, title) {
-                var listItem = todoList.find('[data-id="' + id + '"]');
+                var listItem = view.todoList.find('[data-id="' + id + '"]');
                 listItem.find('input.edit').remove();
                 listItem.removeClass('editing');
                 listItem.removeData('canceled');
@@ -115,92 +123,95 @@ function TodoView() {
              * @param {number} id       The todo identitifier.
              */
             removeItem: function (id) {
-                var item = todoList.find('[data-id="' + id + '"]');
+                var item = view.todoList.find('[data-id="' + id + '"]');
                 item.remove();
             }
         };
     
-    /**************************************************************************
-     * UI EVENT HANDLERS
-     *************************************************************************/
-    
-    newTodo.on('change', function() {
-        self.trigger(self.messages.todoAdd, this.value);
-    });
-    
-    clearCompleted.on('click', function() {
-        self.trigger(self.messages.todoRemoveCompleted, this, clearCompleted.checked);
-    });
-    
-    
-    toggleAll.on('click', function(event) {
-        self.trigger(self.messages.todoToggleAll, toggleAll.prop('checked'));
-    });
-    
     /**
-     * Initiate edit of todo item.
-     *
-     * @param {event}   event   Event object.
+     * Attaches the UI event handler to the view selectors.
      */
-    todoList.on('dblclick', 'li label', function(event) {
-        var id = $(event.target).parents('li').data('id');
-        self.trigger(self.messages.todoEdit, id);
-    });
-    
-    /**
-     * Process the toggling of the completed todo item.
-     *
-     * @param {event}   event   Event object.
-     */
-    todoList.on('click', 'li .toggle', function(event) {
-        var btnCompleted = $(event.target);
-        var todoItem = btnCompleted.parents('li');
-        var label = todoItem.find('label');
-        self.trigger(self.messages.todoToggle, {id: todoItem.data('id'), title: label.text(), completed: btnCompleted.prop('checked')});
-    });
-    
-    /**
-     * Accept and complete todo item editing.
-     *
-     * @param {event}   event   Event object.
-     */
-    todoList.on('keypress', 'li .edit', function(event) {
-        if (event.keyCode === self.ENTER_KEY) {
-            $(event.target).blur();
-        }
-    });
+    function attachHandlers() {
+        
+        view.newTodo.on('change', function() {
+            self.trigger(self.messages.todoAdd, this.value);
+        });
 
-    /*
-     * Cancel todo item editing.
-     */
-    todoList.on('keyup', 'li .edit', function(event) {
-        if (event.keyCode === self.ESCAPE_KEY) {
+        view.clearCompleted.on('click', function() {
+            self.trigger(self.messages.todoRemoveCompleted, this, view.clearCompleted.checked);
+        });
+
+
+        view.toggleAll.on('click', function(event) {
+            self.trigger(self.messages.todoToggleAll, view.toggleAll.prop('checked'));
+        });
+
+        /**
+         * Initiate edit of todo item.
+         *
+         * @param {event}   event   Event object.
+         */
+        view.todoList.on('dblclick', 'li label', function(event) {
+            var id = $(event.target).parents('li').data('id');
+            self.trigger(self.messages.todoEdit, id);
+        });
+
+        /**
+         * Process the toggling of the completed todo item.
+         *
+         * @param {event}   event   Event object.
+         */
+        view.todoList.on('click', 'li .toggle', function(event) {
+            var btnCompleted = $(event.target);
+            var todoItem = btnCompleted.parents('li');
+            var label = todoItem.find('label');
+            self.trigger(self.messages.todoToggle, {id: todoItem.data('id'), title: label.text(), completed: btnCompleted.prop('checked')});
+        });
+
+        /**
+         * Accept and complete todo item editing.
+         *
+         * @param {event}   event   Event object.
+         */
+        view.todoList.on('keypress', 'li .edit', function(event) {
+            if (event.keyCode === self.ENTER_KEY) {
+                $(event.target).blur();
+            }
+        });
+
+        /*
+         * Cancel todo item editing.
+         */
+        view.todoList.on('keyup', 'li .edit', function(event) {
+            if (event.keyCode === self.ESCAPE_KEY) {
+                var editor = $(event.target);
+                var todoItem = editor.parents('li');
+                var id = todoItem.data('id');
+                todoItem.data('canceled', true);
+                editor.blur();
+                self.trigger(self.messages.todoEditCancel, id);
+            }
+        });
+
+        /*
+         * Accept as completion of todo item editing when focus is loss.
+         */
+        view.todoList.on('blur', 'li .edit', function(event) {
             var editor = $(event.target);
             var todoItem = editor.parents('li');
-            var id = todoItem.data('id');
-            todoItem.data('canceled', true);
-            editor.blur();
-            self.trigger(self.messages.todoEditCancel, id);
-        }
-    });
-    
-    /*
-     * Accept as completion of todo item editing when focus is loss.
-     */
-    todoList.on('blur', 'li .edit', function(event) {
-        var editor = $(event.target);
-        var todoItem = editor.parents('li');
-        if (!todoItem.data('canceled')) {
-            var id = todoItem.data('id');
-            self.trigger(self.messages.todoEditSave, id, editor.val());
-        }
-    });
+            if (!todoItem.data('canceled')) {
+                var id = todoItem.data('id');
+                self.trigger(self.messages.todoEditSave, id, editor.val());
+            }
+        });
 
-    // Remove todo item.
-    todoList.on('click', '.destroy', function(event) {
-        var id = $(event.target).parents('li').data('id');
-        self.trigger(self.messages.todoRemove, id);
-    });
+        // Remove todo item.
+        view.todoList.on('click', '.destroy', function(event) {
+            var id = $(event.target).parents('li').data('id');
+            self.trigger(self.messages.todoRemove, id);
+        });
+    }
+    
     
     // Initialize view commands.
     this.init(viewCommands);
