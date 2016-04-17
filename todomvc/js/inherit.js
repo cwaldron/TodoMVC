@@ -1,4 +1,4 @@
-/*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true, -W055 */
+/*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
 
 /**
  * Javascript class inheritance.
@@ -12,19 +12,6 @@
 (function () {
     "use strict";
 	
-	var getClassName = function(clazz) {
-        var name;
-		var result = /(this)\.inherit\(([\w\.]+)[,|\)]/.exec(clazz.toString());
-		if (result === null) {
-			result = /(function)\s+(\w+).*/g.exec(clazz.toString());
-			//if (result == null) {
-				//throw new Error("cannot reference undeclared class");
-			//}
-		}
-		name = result[2];
-        return name;
-    };
-
     /**
      * creates a derive class from the base class.
      *
@@ -77,7 +64,6 @@
                     }
                 }
                 this.$base = (base) ? clazz.prototype : {};
-                this.$class = getClassName(clazz);
             }
         });
     }

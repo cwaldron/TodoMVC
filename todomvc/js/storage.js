@@ -12,7 +12,7 @@
 var Storage = function () {
 	'use strict';
     
-    this.inherit(Storage);
+    this.inherit(Storage, Model);
     
     var noop = function () {},
         storage = new Map(),

@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
-/*global $, _, document, View, TodoTemplate */
+/*global $, document, View, TodoTemplate */
 
 /**
  * The todo view.

@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
-/* globals console, Subscriber, TodoConfig, TodoStore, TodoView */
+/* globals console, Subscriber, Controller, TodoConfig, TodoStore, TodoView */
 
 /**
  * The todos controller.
@@ -9,26 +9,26 @@
 function Todos() {
     "use strict";
     
-    var currentState,
-        prevState,
-        settings = new TodoConfig(),
+    this.inherit(Todos, Controller);
+    
+    var settings = new TodoConfig(),
         view = new TodoView(),
         store = new TodoStore();
+
     
 	/**
-	 * Loads and initialises the view
+	 * Set the application state.
 	 *
 	 * @param {string} '' | 'active' | 'completed'
 	 */
-    this.navigate = function(location) {
-        currentState = getState(location);
-        if (prevState !== currentState) {
-            display();
-        }
-        prevState = currentState;
-	};
+    this.stateChanged = function() {
+        this.executeState();
+        view.render(view.commands.setFilter, this.getHyperlink());
+        showStats();
+    };
     
-	/**
+
+    /**
 	 * Updates the pieces of the page which change depending on the remaining
 	 * number of todos.
 	 */
@@ -39,36 +39,7 @@ function Todos() {
         });
 	}
     
-	/**
-	 * Set the application state.
-	 *
-	 * @param {string} '' | 'active' | 'completed'
-	 */
-    function display() {
-        router[currentState]();
-        view.render(view.commands.setFilter, getHyperlink(currentState));
-        showStats();
-    }
     
-	/**
-	 * Translate the current state into the hyperlink reference.
-	 *
-	 * @param {string}     currentState
-	 */
-    function getHyperlink(currentState) {
-        return '#/' + ((currentState === 'default') ? '' : currentState);
-    }
-    
-	/**
-	 * Gets the controller state from the location.
-	 *
-	 * @param {string} '' | 'active' | 'completed'
-	 */
-    function getState(location) {
-        var state = (location.hash) ? location.hash.split('/')[1] : 'default';
-        return state || 'default';
-    }
-
     /**
      * Router is the receiver of events that changes the application state.
      */
@@ -120,12 +91,12 @@ function Todos() {
                 return;
             }
 
-            store.create(title, function () {
+            store.create(title, new Subscriber(this, function () {
                 view.render(view.commands.clearNewTodo);
-                display();
-            });
+                this.stateChanged();
+            }));
         }),
-                                
+
         /*
          * Triggers the item editing mode.
          */
@@ -223,4 +194,5 @@ function Todos() {
 	 */
     view.on(subscribers);
     view.render(view.commands.initContent, settings);
+    this.init(router);
 }
