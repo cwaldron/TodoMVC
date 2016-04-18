@@ -1,5 +1,5 @@
 /*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
-/* globals $, console, document, Subscriber, Storage, TodoItem */
+/* globals $, console, document, Model, Subscriber, Storage, TodoItem */
 
 /**
  * The todos model.
@@ -8,6 +8,8 @@
  */
 function TodoStore() {
     "use strict";
+    
+    this.inherit(TodoStore, Model);
     
     var DBNAME = 'todos',
         storage = new Storage(),

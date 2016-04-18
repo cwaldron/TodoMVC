@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
-/*global $, console, localStorage, Map, Messages, View */
+/*global console, localStorage, Map */
 
 /**
  * Creates a storage object that wraps local storage.
@@ -11,8 +11,6 @@
 
 var Storage = function () {
 	'use strict';
-    
-    this.inherit(Storage, Model);
     
     var noop = function () {},
         storage = new Map(),
