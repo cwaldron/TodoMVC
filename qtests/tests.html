@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>No Framework Unit Tests</title>
+		<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.23.1.css">
+
+		
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+		
+		<!-- QUnit includes -->
+		<script src="https://code.jquery.com/qunit/qunit-1.23.1.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
+        
+        <!--Prevent Tests from auto starting-->
+        <script>
+        // Defer QUnit so RequireJS can work its magic and resolve all modules.
+        QUnit.config.autostart = false;
+        </script>
+		
+		<!-- Load RequireJS & the testsuite -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js" data-main="testsuite.js"></script>
+		
+	</body>
+</html>

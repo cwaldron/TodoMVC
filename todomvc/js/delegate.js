@@ -1,4 +1,5 @@
 /*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
+/* global console */
 var Delegate = (function () {
     "use strict";
 
@@ -48,7 +49,7 @@ var Delegate = (function () {
                     return method;
                 }
             };
-
+            
             this.invoke.equals = function (delegate) {
                 return this.scope === delegate.scope && this.callback === delegate.callback;
             };

@@ -43,13 +43,12 @@ var Publisher = function (message) {
     this.unsubscribe = function (subscriber) {
         var subscriberDelegate = getDelegate(subscriber);
         if (subscriberDelegate !== null) {
-            
             var count = subscribers.length;
             var newArray = [];
             for (var ii = 0; ii < count; ++ii) {
                 var delegate = subscribers[ii];
                 if (delegate.equals(subscriber) === false) {
-                    newArray.push(subscriber);
+                    newArray.push(delegate);
                 }
             }
             subscribers = newArray;
