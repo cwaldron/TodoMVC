@@ -8,7 +8,7 @@
     require.config({
         baseUrl: "./src",
 		paths: {
-			jquery: "http://code.jquery.com/jquery-2.2.3",
+			$: "http://code.jquery.com/jquery-2.2.3",
 			qunit: "http://code.jquery.com/qunit/qunit-1.23.1",
 			delegate: "todomvc/js/delegate",
 			inherit: "todomvc/js/inherit",
@@ -18,6 +18,7 @@
 			subscriber: "todomvc/js/subscriber",
 			dispatcher: "todomvc/js/dispatcher",
 			glossary: "todomvc/js/glossary",
+			template: "todomvc/js/template",
 		}
     });
 
@@ -31,6 +32,7 @@
 		"tests/eventbus.tests.js",
 		"tests/dispatcher.tests.js",
 		"tests/glossary.tests.js",
+		"tests/template.tests.js",
 	];
 	
     // Resolve all testModules and then start the Test Runner.
