@@ -44,8 +44,8 @@ var Storage = function () {
 	/**
 	 * Finds items based on a query given as a JS object
 	 *
-	 * @param {object} query The query to match against (i.e. {foo: 'bar'})
-	 * @param {function} callback	 The callback to fire when the query has
+	 * @param {object}     query       The query to match against (i.e. {foo: 'bar'})
+	 * @param {function}   callback    The callback to fire when the query has
 	 * completed running
 	 *
 	 * @example
@@ -135,15 +135,8 @@ var Storage = function () {
         this.create(name);
         var store = storage.get(name);
 
-        // obtain the id.
-        var id = entity.id;
-        if (!id) {
-            id = new Date().getTime();
-            entity.id = id;
-        }
-
         // update and save the item.
-        store.set(id, entity);
+        store.set(entity.id, entity);
         localStorage.setItem(name, store.toString());
         
         // call back.

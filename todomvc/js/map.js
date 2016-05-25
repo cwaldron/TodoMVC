@@ -146,7 +146,7 @@ var Map = function (json) {
     };
     
 	/**
-	 * Retuns a collection of the map keys.
+	 * Returns a collection of the map keys.
 	 *
 	 * @example
 	 * map.keys();

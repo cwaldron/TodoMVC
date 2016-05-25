@@ -4,7 +4,7 @@
 /**
  * An event bus is an object that dispatches notification of events to 
  * subscribers that are bound to a specific message.  A message is an 
- * event type.  When an event of a particualar type occurs the event message
+ * event type.  When an event of a particular type occurs the event message
  * is published to subscribers of that event type.
  *
  * @class
@@ -30,7 +30,7 @@ var EventBus = function (messages) {
     }
     
 	/**
-	 * subsribe(message, subscriber)
+	 * subscribe(message, subscriber)
 	 *
 	 * attaches a subscriber to a message.
      *
@@ -46,7 +46,7 @@ var EventBus = function (messages) {
     };
     
 	/**
-	 * unsubsribe(message, subscriber)
+	 * unsubscribe(message, subscriber)
 	 *
 	 * detaches a subscriber from a message.
      *

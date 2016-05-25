@@ -20,7 +20,7 @@ function Dispatcher() {
     /**
      * commands
      *
-     * getter to access command defintions.
+     * getter to access command definitions.
      */
 	Object.defineProperty(this, 'commands', {
 	  get: function() {
@@ -60,7 +60,7 @@ function Dispatcher() {
      *
      * initializes the dispather.
      *
-     * @param {object}  commands    Command object.
+     * @param {object}      commands    Command object.
      */
 	this.init = function(commands) {
 		commandCache = commands;

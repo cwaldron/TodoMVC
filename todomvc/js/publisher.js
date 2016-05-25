@@ -22,7 +22,7 @@ var Publisher = function (message) {
     }); 
     
 	/**
-	 * subsribe(subscriber)
+	 * subscribe(subscriber)
 	 *
 	 * adds a subscriber.
      *
@@ -34,7 +34,7 @@ var Publisher = function (message) {
     };
     
 	/**
-	 * unsubsribe(subscriber)
+	 * unsubscribe(subscriber)
 	 *
 	 * removes a subscriber
      *
@@ -81,6 +81,13 @@ var Publisher = function (message) {
 		subscribers = [];
 	};
 
+	/**
+	 * hasSubscribers()
+	 *
+	 * determines whether the publisher has subscribers.
+	 *
+     * @returns {Boolean}
+     */    
     this.hasSubscribers = function() {
         return subscribers.length > 0;
     };

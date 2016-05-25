@@ -9,10 +9,28 @@
 function TodoItem(id_, title_, completed_) {
     "use strict";
     
-    var _id = new Date().getTime(),
+    var _id = guid({hyphens:true}),
         _title = '',
         _completed = !!completed_;
     
+    /**
+	 * Creates a guid used as identifiers.
+	 */
+    function guid(options) {
+
+        var openBrace = options ? (options.braces ? '{' : '') : '',
+            closeBrace = options ? (options.braces ? '}' : '') : '',
+            hyphen = options ? (options.hyphens ? '-' : '') : '';
+        
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        
+        return openBrace + s4() + s4() + hyphen + s4() + hyphen + s4() + hyphen + s4() + hyphen + s4() + s4() + s4() + closeBrace;
+    }
+
     /**
 	 * Initializes the todo item.
 	 *
@@ -37,13 +55,13 @@ function TodoItem(id_, title_, completed_) {
                 break;
 
             case 2:
-                _id = parseInt(id, 10);
+                _id = id;
                 _title = title;
                 _completed = !!completed;
                 break;
 
             case 3:
-                _id = parseInt(id, 10);
+                _id = id;
                 _title = title;
                 _completed = completed;
                 break;
@@ -52,10 +70,6 @@ function TodoItem(id_, title_, completed_) {
                 break;
         }
     
-        if (isNaN(_id)) {
-            throw new Error("invalid id: '" + id + "' argument.");
-        }
-        
         _title = _title.trim();
     }
 

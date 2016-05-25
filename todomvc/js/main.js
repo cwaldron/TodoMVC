@@ -1,14 +1,20 @@
 /* jshint strict: true, undef: true */
-/* globals $, console, document, window, Subscriber, Todos */
+/* globals $, console, document, window, Delegate, Todos */
 
 $(document).ready(function() {
     "use strict";
     
     var todos = new Todos();
-    var subscriber = new Subscriber(todos, function() { 
+
+    var onHashChange = Delegate.create(todos, function() { 
         this.navigate(window.location);
     });
     
-    $(window).on('load', subscriber);
-	$(window).on('hashchange', subscriber);
+    var onLoad = Delegate.create(todos, function() { 
+        this.init()
+        .then(onHashChange);
+    });
+    
+    $(window).on('load', onLoad);
+	$(window).on('hashchange', onHashChange);
 });

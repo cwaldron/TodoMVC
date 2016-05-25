@@ -12,28 +12,28 @@ function TodoView() {
 	this.inherit(TodoView, View);
 	
 	var self = this,
-		dom = {},
+		view = {},
+		todoapp = $('.todoapp'),
 		template = new TodoTemplate(),
 		
 		viewCommands = {
 			
 			initContent: function(settings) {
-				dom.todoapp = $('.todoapp');
 				var element = template.createElementFor(template.content, settings.glossary);
-				dom.todoapp.append(element);
-				dom.todoList = $('.todo-list');
-				dom.todoItemCount = $('.todo-count');
-				dom.clearCompleted = $('.clear-completed');
-				dom.workspace = $('.workspace');
-				dom.main = $('.main');
-				dom.menu = $('.menu');
-				dom.toggleAll = $('.toggle-all');
-				dom.newTodo = $('.new-todo');
+				todoapp.append(element);
+				view.todoList = $('.todo-list');
+				view.todoItemCount = $('.todo-count');
+				view.clearCompleted = $('.clear-completed');
+				view.workspace = $('.workspace');
+				view.main = $('.main');
+				view.menu = $('.menu');
+				view.toggleAll = $('.toggle-all');
+				view.newTodo = $('.new-todo');
 				attachHandlers();
 			},
 			
 			showEntries: function (todos) {
-				dom.todoList.empty();
+				view.todoList.empty();
 				todos.forEach(function(todo) {
 					var viewdata = Object.create(null);
 					viewdata.id = todo.id;
@@ -44,7 +44,7 @@ function TodoView() {
 					}
 
 					var element = template.createElementFor(template.listitem, viewdata);
-					dom.todoList.append(element);
+					view.todoList.append(element);
 				});
 			},
 			
@@ -53,35 +53,35 @@ function TodoView() {
 				viewdata.count = stats.active;
 				viewdata.plural = (stats.active > 1) ? 's' : '';
 				var text = template.createTextFor(template.summary, viewdata);
-				dom.todoItemCount.html(text);
-				dom.workspace.css('display', (stats.total > 0) ? 'block' : 'none');
-				dom.clearCompleted.css('display', (stats.completed > 0) ? 'block' : 'none');
+				view.todoItemCount.html(text);
+				view.workspace.css('display', (stats.total > 0) ? 'block' : 'none');
+				view.clearCompleted.css('display', (stats.completed > 0) ? 'block' : 'none');
 			},
 			
 			toggleAll: function (isCompleted) {
-				dom.toggleAll.prop('checked', isCompleted);
+				view.toggleAll.prop('checked', isCompleted);
 			},
 			
 			setFilter: function (href) {
-				dom.menu.find('.filters .selected').removeClass('selected');
-				dom.menu.find('.filters [href="' + href + '"]').addClass('selected');
+				view.menu.find('.filters .selected').removeClass('selected');
+				view.menu.find('.filters [href="' + href + '"]').addClass('selected');
 			},
 			
 			/**
 			 * Clears the new todo field.
 			 */
 			clearNewTodo: function () {
-				dom.newTodo.val('');
+				view.newTodo.val('');
 			},
 			
 			/**
 			 * Change the completion state of the todo item.
 			 *
-			 * @param {number} id		The todo identitifier.
+			 * @param {number} id		The todo identifier.
 			 * @param {string} title	The title of the todo.
 			 */
 			completedItem: function (id, completed) {
-				var listItem = dom.todoList.find('[data-id="' + id + '"]');
+				var listItem = view.todoList.find('[data-id="' + id + '"]');
 				var btnCompleted = listItem.find('.toggle');
 				listItem[(completed) ? 'addClass' : 'removeClass']('completed');
 				btnCompleted.prop('checked', completed);
@@ -90,11 +90,11 @@ function TodoView() {
 			/**
 			 * Edit todo by creating an input field used for editing.
 			 *
-			 * @param {number} id		The todo identitifier.
+			 * @param {number} id		The todo identifier.
 			 * @param {string} title	The title of the todo.
 			 */
 			editItem: function (id, title) {
-				var listItem = dom.todoList.find('[data-id="' + id + '"]'),
+				var listItem = view.todoList.find('[data-id="' + id + '"]'),
 					input = $(document.createElement('input'));
 				listItem.addClass('editing');
 				input.addClass('edit');
@@ -106,11 +106,11 @@ function TodoView() {
 			/**
 			 * Edit of todo is completed.
 			 *
-			 * @param {number} id		The todo identitifier.
+			 * @param {number} id		The todo identifier.
 			 * @param {string} title	The title of the todo.
 			 */
 			editItemDone: function (id, title) {
-				var listItem = dom.todoList.find('[data-id="' + id + '"]');
+				var listItem = view.todoList.find('[data-id="' + id + '"]');
 				listItem.find('input.edit').remove();
 				listItem.removeClass('editing');
 				listItem.removeData('canceled');
@@ -123,7 +123,7 @@ function TodoView() {
 			 * @param {number} id		The todo identitifier.
 			 */
 			removeItem: function (id) {
-				var item = dom.todoList.find('[data-id="' + id + '"]');
+				var item = view.todoList.find('[data-id="' + id + '"]');
 				item.remove();
 			}
 		};
@@ -133,17 +133,17 @@ function TodoView() {
 	 */
 	function attachHandlers() {
 		
-		dom.newTodo.on('change', function() {
+		view.newTodo.on('change', function() {
 			self.trigger(self.messages.todoAdd, this.value);
 		});
 
-		dom.clearCompleted.on('click', function() {
-			self.trigger(self.messages.todoRemoveCompleted, this, dom.clearCompleted.checked);
+		view.clearCompleted.on('click', function() {
+			self.trigger(self.messages.todoRemoveCompleted, this, view.clearCompleted.checked);
 		});
 
 
-		dom.toggleAll.on('click', function(event) {
-			self.trigger(self.messages.todoToggleAll, dom.toggleAll.prop('checked'));
+		view.toggleAll.on('click', function(event) {
+			self.trigger(self.messages.todoToggleAll, view.toggleAll.prop('checked'));
 		});
 
 		/**
@@ -151,7 +151,7 @@ function TodoView() {
 		 *
 		 * @param {event}	event	Event object.
 		 */
-		dom.todoList.on('dblclick', 'li label', function(event) {
+		view.todoList.on('dblclick', 'li label', function(event) {
 			var id = $(event.target).parents('li').data('id');
 			self.trigger(self.messages.todoEdit, id);
 		});
@@ -161,7 +161,7 @@ function TodoView() {
 		 *
 		 * @param {event}	event	Event object.
 		 */
-		dom.todoList.on('click', 'li .toggle', function(event) {
+		view.todoList.on('click', 'li .toggle', function(event) {
 			var btnCompleted = $(event.target);
 			var todoItem = btnCompleted.parents('li');
 			var label = todoItem.find('label');
@@ -173,7 +173,7 @@ function TodoView() {
 		 *
 		 * @param {event}	event	Event object.
 		 */
-		dom.todoList.on('keypress', 'li .edit', function(event) {
+		view.todoList.on('keypress', 'li .edit', function(event) {
 			if (event.keyCode === self.ENTER_KEY) {
 				$(event.target).blur();
 			}
@@ -182,7 +182,7 @@ function TodoView() {
 		/*
 		 * Cancel todo item editing.
 		 */
-		dom.todoList.on('keyup', 'li .edit', function(event) {
+		view.todoList.on('keyup', 'li .edit', function(event) {
 			if (event.keyCode === self.ESCAPE_KEY) {
 				var editor = $(event.target);
 				var todoItem = editor.parents('li');
@@ -196,7 +196,7 @@ function TodoView() {
 		/*
 		 * Accept as completion of todo item editing when focus is loss.
 		 */
-		dom.todoList.on('blur', 'li .edit', function(event) {
+		view.todoList.on('blur', 'li .edit', function(event) {
 			var editor = $(event.target);
 			var todoItem = editor.parents('li');
 			if (!todoItem.data('canceled')) {
@@ -206,13 +206,17 @@ function TodoView() {
 		});
 
 		// Remove todo item.
-		dom.todoList.on('click', '.destroy', function(event) {
+		view.todoList.on('click', '.destroy', function(event) {
 			var id = $(event.target).parents('li').data('id');
 			self.trigger(self.messages.todoRemove, id);
 		});
 	}
-	
-	
-	// Initialize view commands.
-	this.init(viewCommands);
+    
+	/**
+	 * Initialize the view.
+	 */
+    this.init = function() {
+        this.$base.init.call(this, viewCommands);
+        return template.init();
+    };
 }
