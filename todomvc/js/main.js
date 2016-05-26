@@ -1,20 +1,23 @@
 /* jshint strict: true, undef: true */
-/* globals $, console, document, window, Delegate, Todos */
+/* globals $, console, document, window, Todos */
 
 $(document).ready(function() {
     "use strict";
-    
+
+    // Create Todos controller.
     var todos = new Todos();
 
-    var onHashChange = Delegate.create(todos, function() { 
-        this.navigate(window.location);
+    // Setup hash change handler.
+    var onHashChange = (function() {
+        todos.navigate(window.location);
     });
     
-    var onLoad = Delegate.create(todos, function() { 
-        this.init()
-        .then(onHashChange);
+    // Set up load handler.
+    var onLoad = (function() {
+        todos.init().then(onHashChange);
     });
-    
+
+    // Attach application event handlers.
     $(window).on('load', onLoad);
 	$(window).on('hashchange', onHashChange);
 });

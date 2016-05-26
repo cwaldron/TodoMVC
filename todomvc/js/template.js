@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, laxbreak:true */
-/* globals $, console, document, HTMLElement, Promise, Handlebars */
+/* globals $, console, document, window, HTMLElement, Promise, Handlebars */
 
 /**
  * The base template class.
@@ -13,7 +13,13 @@ function Template() {
 	
 	var noop = function() {},
 		templateCache = Object.create(null);
-	
+    
+    function getFullTemplateUrl(url) {
+        var prefixIndex = window.location.href.lastIndexOf('/'),
+            prefix = window.location.href.slice(0, prefixIndex+1);
+        return prefix + url;
+    }
+    
 	/**
 	 * Load the template cache from the source properties.
 	 *
@@ -28,7 +34,11 @@ function Template() {
                     templateCache[name] = Handlebars.compile(source[name]);
                 });
                 
-                resolve();
+                if (Object.getOwnPropertyNames(templateCache).length > 0) {
+                    resolve();
+                } else {
+                    reject({message: 'Cannot find template object'});
+                }
             }
             catch(e) {
                 reject(e);
@@ -51,7 +61,11 @@ function Template() {
                     templateCache[name] = Handlebars.compile(element.innerHTML);
                 });
                 
-                resolve();
+                if (Object.getOwnPropertyNames(templateCache).length > 0) {
+                    resolve();
+                } else {
+                    reject({message: 'Cannot find template source: (' + source.selector + ')'});
+                }
             }
             catch(e) {
                 reject(e);
@@ -67,17 +81,15 @@ function Template() {
      * @returns {Promise}      Promise object.
 	 */
 	function loadTemplateFromUrl(source) {
+        var lastSeparator = source.lastIndexOf('.'),
+            name = source.substr(0, lastSeparator),
+            ext = source.substr(lastSeparator) || '.html';
+        
         return new Promise(function(resolve, reject) {
             try {
-                
-                var lastSeparator = source.lastIndexOf('.'),
-                    name = source.substr(0, lastSeparator),
-                    ext = source.substr(lastSeparator);
-                
-                
                     // load template file.
                     $.ajax({
-                        url: name + (ext || '.html'),
+                        url: name + ext,
                         dataType: 'text'
                     })
                     .done(function(data) {
@@ -99,7 +111,7 @@ function Template() {
                         resolve();
                     })
                     .fail(function(xhr, textStatus, errorThrown) {
-                        reject({xhr: xhr, text: textStatus, error: errorThrown});
+                        reject({xhr: xhr, message: 'Cannot load template source: (' + getFullTemplateUrl(name + ext) + ')', status: textStatus});
                     });
             }
             catch(e) {
@@ -155,10 +167,6 @@ function Template() {
                             configurable: false
                         });
                     });
-                })
-            .catch(
-                function (reason) {
-                    console.log('Template cache load failure: (' + reason + ')');
                 });
     };
 	

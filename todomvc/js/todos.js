@@ -17,6 +17,15 @@ function Todos() {
 		store = new TodoStore();
     
 	/**
+	 * Initialize instance.
+	 */
+    function initialize() {
+        view.on(subscribers);
+        view.render(view.commands.initContent, settings);
+        self.$base.init.call(self, router);
+    }
+    
+	/**
 	 * Display the remaining number of todo items.
 	 */
 	function showStats() {
@@ -26,12 +35,13 @@ function Todos() {
 		});
 	}
     
+	/**
+	 * Initialize the todos controller.
+     * 
+     * @returns {Promise}   Resource acquisition promise.
+	 */
     this.init = function() {
-        return view.init().then(function() {
-            view.on(subscribers);
-            view.render(view.commands.initContent, settings);
-            self.$base.init.call(self, router);
-        });
+        return view.init().then(initialize);
     };
     
 	/**

@@ -127,6 +127,13 @@ function TodoView() {
 				item.remove();
 			}
 		};
+    
+	/**
+	 * Initialize instance.
+	 */
+    function initialize() {
+        self.$base.init.call(self, viewCommands);
+    }
 	
 	/**
 	 * Attaches the UI event handler to the view selectors.
@@ -214,9 +221,11 @@ function TodoView() {
     
 	/**
 	 * Initialize the view.
+     * 
+     * @returns {Promise}   Resource acquisition promise.
 	 */
     this.init = function() {
-        this.$base.init.call(this, viewCommands);
-        return template.init();
+        return template.init()
+            .then(initialize);
     };
 }

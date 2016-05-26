@@ -1,11 +1,27 @@
 /*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
-/*global $, Template */
+/*global $, console, Template */
 
 function TodoTemplate() {
 	'use strict';
 	
 	this.inherit(TodoTemplate, Template);
-	
+    
+	var self = this;
+    
+	/**
+	 * Initialize instance.
+	 */
+    function initialize(source) {
+        return self.$base.init.call(self, source)
+            .catch(
+                function (reason) {
+                    console.log('Template cache load failure: ' + reason.message);
+                });
+    }
+    
+	/**
+	 * Template object.
+	 */
 	var templates = {
 		
 		content: ''
@@ -49,12 +65,16 @@ function TodoTemplate() {
 	};
 	
     
+    /**
+	 * init()
+     *
+     * initialize templates from source.
+     *
+     * @returns {Promise}   Promise used to acquire templates.
+     */
     this.init = function() {
-        //return this.$base.init.call(this, $('#templates'));
-        return this.$base.init.call(this, 'template/templates.html');
+        return initialize(templates);
+        //return initialize($('#templates'));
+        //return initialize('template/templates.html');
     };
-    
-	//this.init(templates);
-	//this.init($('#templates'));
-	//this.init('template/templates.html');
 }
