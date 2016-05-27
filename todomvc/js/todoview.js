@@ -201,7 +201,7 @@ function TodoView() {
 		});
 
 		/*
-		 * Accept as completion of todo item editing when focus is loss.
+		 * Complete todo item editing when focus is loss.
 		 */
 		view.todoList.on('blur', 'li .edit', function(event) {
 			var editor = $(event.target);

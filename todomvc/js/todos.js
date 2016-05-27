@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
-/* globals console, Subscriber, Controller, TodoConfig, TodoStore, TodoView */
+/* globals console, Promise, Subscriber, Controller, TodoConfig, TodoModel, TodoView */
 
 /**
  * The todos controller.
@@ -14,7 +14,7 @@ function Todos() {
 	var self = this,
         settings = new TodoConfig(),
 		view = new TodoView(),
-		store = new TodoStore();
+		model = new TodoModel();
     
 	/**
 	 * Initialize instance.
@@ -29,7 +29,7 @@ function Todos() {
 	 * Display the remaining number of todo items.
 	 */
 	function showStats() {
-		store.getStats(function(stats) {
+		model.getStats(function(stats) {
 			view.render(view.commands.showStats, stats);
 			view.render(view.commands.toggleAll, (stats.completed === stats.total));
 		});
@@ -41,7 +41,10 @@ function Todos() {
      * @returns {Promise}   Resource acquisition promise.
 	 */
     this.init = function() {
-        return view.init().then(initialize);
+        return Promise.all([settings.init(),
+                            model.init(),
+                            view.init()])
+            .then(initialize);
     };
     
 	/**
@@ -64,7 +67,7 @@ function Todos() {
 		 * Renders all todo list items.
 		 */
 		default: function () {
-			store.find(function (results) {
+			model.find(function (results) {
 				view.render(view.commands.showEntries, results);
 			});
 		},
@@ -73,7 +76,7 @@ function Todos() {
 		 * Renders all active tasks
 		 */
 		active: function () {
-			store.find({ completed: false }, function (results) {
+			model.find({ completed: false }, function (results) {
 				view.render(view.commands.showEntries, results);
 			});
 		},
@@ -82,7 +85,7 @@ function Todos() {
 		 * Renders all completed tasks
 		 */
 		completed: function () {
-			store.find({ completed: true }, function (results) {
+			model.find({ completed: true }, function (results) {
 				view.render(view.commands.showEntries, results);
 			});
 		}
@@ -104,7 +107,7 @@ function Todos() {
 				return;
 			}
 
-			store.create(title, new Subscriber(this, function () {
+			model.add(title, new Subscriber(this, function () {
 				view.render(view.commands.clearNewTodo);
 				this.stateChanged();
 			}));
@@ -114,7 +117,7 @@ function Todos() {
 		 * Starts the todo item editing mode.
 		 */
 		todoEdit: new Subscriber(this, function (id) {
-			store.find(id, function (results) {
+			model.find(id, function (results) {
 				view.render(view.commands.editItem, id, results[0].title);
 			});
 		}),
@@ -124,7 +127,7 @@ function Todos() {
 		 */
 		todoEditSave: new Subscriber(this, function (id, title) {
 			if (title.length !== 0) {
-				store.save({id: id, title: title}, function (item) {
+				model.save({id: id, title: title}, function (item) {
 					view.render(view.commands.editItemDone, item.id, item.title);
 				});
 			} else {
@@ -136,7 +139,7 @@ function Todos() {
 		 * Cancels the todo item editing mode and restore previous value.
 		 */
 		todoEditCancel: new Subscriber(this, function (id) {
-			store.find(id, function (results) {
+			model.find(id, function (results) {
 				view.render(view.commands.editItemDone, id, results[0].title);
 			});
 		}),
@@ -145,7 +148,7 @@ function Todos() {
 		 * Removes the todo item.
 		 */
 		todoRemove: new Subscriber(this, function (id, silent) {
-			store.remove(id, function () {
+			model.remove(id, function () {
 				view.render(view.commands.removeItem, id);
 			});
 
@@ -157,7 +160,7 @@ function Todos() {
 		 * Removes all completed items todo items.
 		 */
 		todoRemoveCompleted: new Subscriber(this, function () {
-			store.find({ completed: true }, function (results) {
+			model.find({ completed: true }, function (results) {
 				results.forEach(function (item) {
 					subscribers.todoRemove(item.id, true);
 				});
@@ -170,7 +173,7 @@ function Todos() {
 		 * Toggles the completion of a todo item.
 		 */
 		todoToggle: new Subscriber(this, function (viewdata, silent) {
-			store.save(viewdata, function (item) {
+			model.save(viewdata, function (item) {
 				view.render(view.commands.completedItem, item.id, item.completed);
 			});
 			
@@ -182,7 +185,7 @@ function Todos() {
 		 * Toggles completion of all todo items.
 		 */
 		todoToggleAll: new Subscriber(this, function (completed) {
-			store.find({ completed: !completed }, function (results) {
+			model.find({ completed: !completed }, function (results) {
 				results.forEach(function (item) {
 					subscribers.todoToggle({id: item.id, title: item.title, completed: completed}, true);				 
 				});

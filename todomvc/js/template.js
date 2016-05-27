@@ -14,10 +14,17 @@ function Template() {
 	var noop = function() {},
 		templateCache = Object.create(null);
     
-    function getFullTemplateUrl(url) {
+	/**
+	 * Converts relative url path to absolute url path.
+	 *
+	 * @param {string}     url     relative url path.
+     *
+     * @returns {string}           Absolute url.
+	 */
+    function getAbsoluteUrl(relativeUrl) {
         var prefixIndex = window.location.href.lastIndexOf('/'),
             prefix = window.location.href.slice(0, prefixIndex+1);
-        return prefix + url;
+        return prefix + relativeUrl;
     }
     
 	/**
@@ -111,7 +118,7 @@ function Template() {
                         resolve();
                     })
                     .fail(function(xhr, textStatus, errorThrown) {
-                        reject({xhr: xhr, message: 'Cannot load template source: (' + getFullTemplateUrl(name + ext) + ')', status: textStatus});
+                        reject({xhr: xhr, message: 'Cannot load template source: (' + getAbsoluteUrl(name + ext) + ')', status: textStatus});
                     });
             }
             catch(e) {

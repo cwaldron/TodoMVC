@@ -1,5 +1,5 @@
 /*jshint strict: true, undef: true, eqeqeq: true */
-/*global console, localStorage, Map */
+/*global console, localStorage, Promise, Map */
 
 /**
  * Creates a storage object that wraps local storage.
@@ -25,6 +25,29 @@ var Storage = function () {
 		allFilter = function(query, data) {
 			return true;
 		};
+    
+	/**
+	 * Initialize the storage.
+	 *
+	 * @param {string} name    The name of the storage.
+	 *
+	 * @example
+	 * storage.create("mystore");
+	 */
+    this.init = function (name) {
+        return new Promise(function(resolve, reject) {
+            try {
+                if (!storage.has(name)) {
+                    var store = new Map(localStorage.getItem(name));
+                    storage.set(name, store);
+                }
+                resolve();
+            }
+            catch(e) {
+                reject(e);
+            }
+        }); 
+    };
     
 	/**
 	 * Creates the storage.

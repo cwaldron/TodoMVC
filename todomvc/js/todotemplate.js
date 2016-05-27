@@ -73,8 +73,8 @@ function TodoTemplate() {
      * @returns {Promise}   Promise used to acquire templates.
      */
     this.init = function() {
-        return initialize(templates);
-        //return initialize($('#templates'));
+        //return initialize(templates);
+        return initialize($('#templates'));
         //return initialize('template/templates.html');
     };
 }
