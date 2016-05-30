@@ -1,5 +1,5 @@
 /*jshint strict:true, undef:true, eqeqeq:true, laxbreak:true */
-/* globals $, console, document, Model, TodoItem */
+/* globals $, console, document, Model, Subscriber, Storage, TodoItem */
 
 /**
  * The todos storage model.
