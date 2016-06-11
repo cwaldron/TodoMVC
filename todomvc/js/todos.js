@@ -41,10 +41,21 @@ function Todos() {
      * @returns {Promise}   Resource acquisition promise.
 	 */
     this.init = function() {
-        return Promise.all([settings.init(),
-                            model.init(),
-                            view.init()])
-            .then(initialize);
+        
+        // Chained initialization: settings->model->view->initialize.
+        return settings.init()
+            .then(function() {
+                return model.init();
+            }).then(function() {
+                return view.init();
+            }).then(initialize);
+
+        // Parallelize initialization:  (settings||model||view)->initialize.
+        // Comment the chained implementation then uncomment the section below.
+//        return Promise.all([settings.init(),
+//                            model.init(),
+//                            view.init()])
+//            .then(initialize);
     };
     
 	/**
