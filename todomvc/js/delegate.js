@@ -28,7 +28,6 @@ var Delegate = (function () {
         function Delegate(obj, func) {
             var noop = function() {},
                 self = obj,
-                id = Date.now(),
                 method = func;
 
             this.invoke = function () {
@@ -50,14 +49,6 @@ var Delegate = (function () {
                     return method;
                 }
             };
-            
-            Object.defineProperty(this.invoke, 'id', {
-              get: function() {
-                  return id;
-              },
-              enumerable: true,
-              configurable: false
-            });
             
             this.invoke.equals = function (delegate) {
                 return this.scope === delegate.scope && this.callback === delegate.callback;
