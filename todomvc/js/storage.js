@@ -49,21 +49,6 @@ var Storage = function () {
         }); 
     };
     
-    /**
-     * Creates the storage.
-     *
-     * @param {string} name    The name of the storage.
-     *
-     * @example
-     * storage.create("mystore");
-     */
-    this.create = function (name) {
-        if (!storage.has(name)) {
-            var store = new Map(localStorage.getItem(name));
-            storage.set(name, store);
-        }
-    };
-
 	/**
 	 * Finds items based on a query given as a JS object
 	 *
@@ -155,7 +140,6 @@ var Storage = function () {
 	this.save = function (name, entity, callback) {
 
         // get the data store.
-        this.create(name);
         var store = storage.get(name);
 
         // update and save the item.
