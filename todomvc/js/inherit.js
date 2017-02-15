@@ -59,8 +59,6 @@
 				for (var property in clazz.prototype) {	
 					if (property !== '$init') {
 						Object.defineProperty(this, property, Object.getOwnPropertyDescriptor(clazz.prototype, property));
-					} else {
-						delete clazz.prototype[property];
 					}
 				}
 				this.$base = (base) ? clazz.prototype : {};
